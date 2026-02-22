@@ -6,11 +6,14 @@ const api = axios.create({
 });
 
 export interface InventoryItem {
-  id: string;
+  id: number;
+  city: string;
+  venue: string;
   section: string;
   row: string;
   price: number;
-  available: boolean;
+  status: string;
+  reserved_until: string | null;
 }
 
 export interface ReservePayload {

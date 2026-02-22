@@ -81,7 +81,7 @@ const ReservationDrawer = ({ item, open, onOpenChange }: ReservationDrawerProps)
   const onSubmit = (data: FormData) => {
     if (!item) return;
     mutation.mutate({
-      inventoryId: item.id,
+      inventoryId: String(item.id),
       fullName: data.fullName,
       email: data.email,
       phone: data.phone,

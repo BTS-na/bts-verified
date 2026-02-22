@@ -1,12 +1,37 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import { useInventory } from "@/hooks/use-inventory";
+import type { InventoryItem } from "@/lib/api";
+import StickyHeader from "@/components/StickyHeader";
+import HeroSection from "@/components/HeroSection";
+import InventoryCards from "@/components/InventoryCards";
+import ReservationDrawer from "@/components/ReservationDrawer";
 
 const Index = () => {
+  const { data: inventory, isLoading, dataUpdatedAt } = useInventory();
+  const [selectedItem, setSelectedItem] = useState<InventoryItem | null>(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const handleReserve = (item: InventoryItem) => {
+    setSelectedItem(item);
+    setDrawerOpen(true);
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-background">
+      <StickyHeader lastSync={dataUpdatedAt ? new Date(dataUpdatedAt) : null} />
+      <main className="mx-auto max-w-[480px] pb-8">
+        <HeroSection />
+        <InventoryCards
+          items={inventory ?? []}
+          isLoading={isLoading}
+          onReserve={handleReserve}
+        />
+      </main>
+      <ReservationDrawer
+        item={selectedItem}
+        open={drawerOpen}
+        onOpenChange={setDrawerOpen}
+      />
     </div>
   );
 };

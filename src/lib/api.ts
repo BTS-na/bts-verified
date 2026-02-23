@@ -25,6 +25,8 @@ export interface ReservePayload {
   quantity: number;
   city: string;
   total: number;
+  section: string;
+  row: string;
 }
 
 export interface ReserveResponse {
@@ -84,6 +86,8 @@ export const submitReservation = async (payload: ReservePayload): Promise<Reserv
       total: payload.total,
       email: payload.email,
       phone: payload.phone,
+      section: payload.section,
+      row: payload.row,
       expiresAt,
     },
   }).catch((err) => console.error("Confirmation email failed:", err));

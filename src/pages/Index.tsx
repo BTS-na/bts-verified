@@ -23,12 +23,12 @@ const Index = () => {
       <StickyHeader lastSync={dataUpdatedAt ? new Date(dataUpdatedAt) : null} />
       <main className="mx-auto max-w-[480px] pb-8">
         <HeroSection />
-        <InventoryCards />
-          <TestimonialsSection />
+        <InventoryCards
           items={inventory ?? []}
           isLoading={isLoading}
           onReserve={handleReserve}
         />
+        <TestimonialsSection />
         <SiteFooter />
       </main>
       <ReservationDrawer

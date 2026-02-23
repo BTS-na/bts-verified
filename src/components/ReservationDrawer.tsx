@@ -87,6 +87,7 @@ const ReservationDrawer = ({ item, open, onOpenChange }: ReservationDrawerProps)
       phone: data.phone,
       quantity: data.quantity,
       city: item.city,
+      total: item.price * data.quantity,
     });
   };
 

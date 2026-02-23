@@ -1,3 +1,4 @@
+import TestimonialsSection from "@/components/TestimonialsSection";
 import { useState } from "react";
 import { useInventory } from "@/hooks/use-inventory";
 import type { InventoryItem } from "@/lib/api";

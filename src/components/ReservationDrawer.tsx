@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
-import { Shield, Clock, MapPin } from "lucide-react";
+import { Shield, Clock, MapPin, CheckCircle } from "lucide-react";
 import { submitReservation, type InventoryItem, type ReserveResponse } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { PaymentSection } from "./PaymentSection";
 
 const reservationSchema = z.object({
   fullName: z.string().min(2, "Name is required"),
@@ -106,29 +107,48 @@ const ReservationDrawer = ({ item, open, onOpenChange }: ReservationDrawerProps)
     <Drawer open={open} onOpenChange={handleOpenChange}>
       <DrawerContent className="max-w-[480px] mx-auto">
         {success ? (
-          <div className="p-6 space-y-5">
-            <div className="flex items-center gap-2">
-              <Shield className="h-5 w-5 text-accent" />
-              <span className="text-sm font-semibold uppercase tracking-wider text-accent">Secure Hold Confirmed</span>
-            </div>
-
-            <div className="space-y-1">
-              <p className="text-xs font-medium text-muted-foreground">Order ID</p>
-              <p className="text-base font-bold text-foreground font-mono">{success.orderId}</p>
-            </div>
-
-            <div className="space-y-1">
-              <p className="text-xs font-medium text-muted-foreground">Hold Expires In</p>
-              <CountdownTimer expiresAt={success.expiresAt} />
-            </div>
-
-            <div className="rounded-lg bg-secondary p-4 space-y-2">
-              <div className="flex items-start gap-2">
-                <MapPin className="h-4 w-4 mt-0.5 text-muted-foreground" />
-                <p className="text-sm text-foreground leading-relaxed">
-                  Your seats are held. Check your email for verification and payment instructions to finalize your Ticketmaster transfer.
-                </p>
+          <div className="p-6 space-y-5 max-h-[90vh] overflow-y-auto">
+            {/* Success Header */}
+            <div className="text-center">
+              <CheckCircle className="h-12 w-12 text-green-600 mx-auto mb-2" />
+              <div className="flex items-center justify-center gap-2 mb-1">
+                <Shield className="h-5 w-5 text-green-600" />
+                <span className="text-lg font-bold text-green-800">Secure Hold Confirmed</span>
               </div>
+              <p className="text-sm text-gray-600">Complete payment within 30 minutes</p>
+            </div>
+
+            {/* Order Details */}
+            <div className="bg-gray-50 p-4 rounded-lg space-y-3">
+              <div className="flex justify-between">
+                <span className="text-sm text-gray-600">Order ID</span>
+                <span className="text-sm font-bold font-mono text-gray-900">{success.orderId}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm text-gray-600">Hold Expires</span>
+                <CountdownTimer expiresAt={success.expiresAt} />
+              </div>
+              {item && (
+                <div className="flex justify-between">
+                  <span className="text-sm text-gray-600">Seats</span>
+                  <span className="text-sm font-medium text-gray-900">{item.section} Row {item.row}</span>
+                </div>
+              )}
+            </div>
+
+            {/* Payment Section - THIS IS THE NEW PART */}
+            {item && (
+              <PaymentSection 
+                price={item.price} 
+                orderId={success.orderId} 
+              />
+            )}
+
+            {/* Note about email */}
+            <div className="rounded-lg bg-blue-50 p-3 border border-blue-200">
+              <p className="text-xs text-blue-700 text-center">
+                <strong>Tip:</strong> Screenshot this page as backup. Email confirmations may be delayed.
+              </p>
             </div>
           </div>
         ) : (

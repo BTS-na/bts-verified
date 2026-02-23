@@ -86,6 +86,7 @@ const ReservationDrawer = ({ item, open, onOpenChange }: ReservationDrawerProps)
       email: data.email,
       phone: data.phone,
       quantity: data.quantity,
+      city: item.city,
     });
   };
 

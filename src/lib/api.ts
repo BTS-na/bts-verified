@@ -1,3 +1,4 @@
+import { supabase } from "@/integrations/supabase/client";
 import axios from "axios";
 
 const api = axios.create({
@@ -22,6 +23,7 @@ export interface ReservePayload {
   email: string;
   phone: string;
   quantity: number;
+  city: string;
 }
 
 export interface ReserveResponse {
@@ -35,7 +37,28 @@ export const fetchInventory = async (): Promise<InventoryItem[]> => {
   return Array.isArray(data) ? data : data.inventory ?? [];
 };
 
+function generateOrderId(city: string): string {
+  const prefix = city.substring(0, 3).toUpperCase();
+  const num = Math.floor(1000 + Math.random() * 9000);
+  return `${prefix}-${num}`;
+}
+
 export const submitReservation = async (payload: ReservePayload): Promise<ReserveResponse> => {
-  const { data } = await api.post("/api/reserve", payload);
-  return data;
+  const orderId = generateOrderId(payload.city);
+
+  const { error } = await supabase.from("reservations").insert({
+    order_id: orderId,
+    full_name: payload.fullName,
+    email: payload.email,
+    phone: payload.phone,
+    quantity: payload.quantity,
+    city: payload.city,
+    inventory_id: payload.inventoryId,
+  });
+
+  if (error) throw new Error(error.message);
+
+  const expiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString();
+
+  return { orderId, expiresAt };
 };

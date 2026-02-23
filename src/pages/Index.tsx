@@ -18,7 +18,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gray-50">
       <StickyHeader lastSync={dataUpdatedAt ? new Date(dataUpdatedAt) : null} />
       <main className="mx-auto max-w-[480px] pb-8">
         <HeroSection />

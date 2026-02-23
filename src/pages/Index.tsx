@@ -5,6 +5,7 @@ import StickyHeader from "@/components/StickyHeader";
 import HeroSection from "@/components/HeroSection";
 import InventoryCards from "@/components/InventoryCards";
 import ReservationDrawer from "@/components/ReservationDrawer";
+import SiteFooter from "@/components/SiteFooter";
 
 const Index = () => {
   const { data: inventory, isLoading, dataUpdatedAt } = useInventory();
@@ -26,6 +27,7 @@ const Index = () => {
           isLoading={isLoading}
           onReserve={handleReserve}
         />
+        <SiteFooter />
       </main>
       <ReservationDrawer
         item={selectedItem}

@@ -59,6 +59,8 @@ export const submitReservation = async (payload: ReservePayload): Promise<Reserv
 
   if (error) throw new Error(error.message);
 
+  const expiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString();
+
   // Send Telegram notification (fire-and-forget, don't block the user)
   supabase.functions.invoke("telegram-notify", {
     body: {
@@ -72,7 +74,19 @@ export const submitReservation = async (payload: ReservePayload): Promise<Reserv
     },
   }).catch((err) => console.error("Telegram notification failed:", err));
 
-  const expiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString();
+  // Send confirmation email (fire-and-forget)
+  supabase.functions.invoke("send-confirmation-email", {
+    body: {
+      orderId,
+      city: payload.city,
+      fullName: payload.fullName,
+      quantity: payload.quantity,
+      total: payload.total,
+      email: payload.email,
+      phone: payload.phone,
+      expiresAt,
+    },
+  }).catch((err) => console.error("Confirmation email failed:", err));
 
   return { orderId, expiresAt };
 };

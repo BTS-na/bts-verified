@@ -2,3 +2,6 @@ project_id = "fbqvochhipzoohrtergo"
 
 [functions.telegram-notify]
 verify_jwt = false
+
+[functions.send-confirmation-email]
+verify_jwt = false

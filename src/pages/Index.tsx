@@ -23,7 +23,7 @@ const Index = () => {
       <StickyHeader lastSync={dataUpdatedAt ? new Date(dataUpdatedAt) : null} />
       <main className="mx-auto max-w-[480px] pb-8">
         <HeroSection />
-        <InventoryCards
+        <InventoryCards />
           <TestimonialsSection />
           items={inventory ?? []}
           isLoading={isLoading}

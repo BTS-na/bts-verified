@@ -24,6 +24,7 @@ const Index = () => {
       <main className="mx-auto max-w-[480px] pb-8">
         <HeroSection />
         <InventoryCards
+          <TestimonialsSection />
           items={inventory ?? []}
           isLoading={isLoading}
           onReserve={handleReserve}

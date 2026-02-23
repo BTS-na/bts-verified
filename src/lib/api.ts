@@ -61,7 +61,7 @@ export const submitReservation = async (payload: ReservePayload): Promise<Reserv
 
   if (error) throw new Error(error.message);
 
-  const expiresAt = new Date(Date.now() + 15 * 60 * 1000).toISOString();
+  const expiresAt = new Date(Date.now() +30 * 60 * 1000).toISOString();
 
   // Send Telegram notification (fire-and-forget, don't block the user)
   supabase.functions.invoke("telegram-notify", {

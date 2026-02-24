@@ -77,97 +77,108 @@ const PaymentInstructions = ({ price, orderId }: { price: number; orderId: strin
   };
 
   return (
-    <div className="bg-yellow-50 p-4 rounded-lg border-2 border-yellow-400 space-y-4">
+    <div className="w-full max-w-md mx-auto bg-yellow-50 p-4 rounded-2xl border-2 border-yellow-400 space-y-4">
       <p className="text-xs font-bold text-yellow-800 uppercase tracking-wide">
         ⚠️ Complete Payment in 30 Minutes
       </p>
       
       {/* Cash App */}
-      <div className="bg-white p-4 rounded-lg border-2 border-green-500">
-        <div className="flex items-center justify-between mb-2">
-          <span className="font-bold text-gray-900 text-lg">Cash App (Preferred)</span>
-          <span className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full font-medium">Fastest</span>
+      <div className="bg-white p-4 rounded-2xl border-2 border-green-500 space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+          <span className="font-bold text-gray-900 text-lg sm:text-xl">Cash App (Preferred)</span>
+          <span className="inline-flex w-fit bg-green-100 text-green-700 text-xs px-3 py-1 rounded-full font-medium">Fastest</span>
         </div>
         
-        {/* QR Code */}
-        <div className="flex justify-center mb-3">
-          <div className="bg-white p-2 rounded-lg border border-gray-200">
+        {/* QR Code - Mobile First Responsive */}
+        <div className="flex justify-center">
+          <div className="w-full max-w-[260px] bg-white p-5 rounded-2xl border border-gray-100 shadow-sm">
             <img 
               src="/cashapp-qr.png" 
               alt="Cash App QR Code - $BradFlower"
-              className="w-48 h-48 object-contain"
+              className="w-full h-auto object-contain"
             />
           </div>
         </div>
 
-        {/* Cash App Tag */}
-        <div className="text-center mb-3">
-          <p className="text-sm text-gray-500 mb-1">Or type manually:</p>
-          <p className="text-3xl font-bold text-green-600 tracking-wide">$BradFlower</p>
+        {/* Cash App Tag - Responsive Typography */}
+        <div className="text-center">
+          <p className="text-sm text-gray-500 mb-2">Or type manually:</p>
+          <p className="text-3xl sm:text-4xl font-black text-green-600 tracking-tight">$BradFlower</p>
         </div>
 
-        {/* Copy Button */}
-        <div className="flex items-center justify-between bg-green-50 p-3 rounded-lg">
-          <div>
-            <p className="text-sm text-gray-600">Cashtag</p>
-            <p className="text-xl font-bold text-green-600">$BradFlower</p>
-          </div>
-          <button 
-            onClick={() => copyToClipboard('$BradFlower', 'cashapp')}
-            className="flex items-center justify-center gap-2 bg-green-600 text-white px-6 py-3 rounded-2xl text-sm font-semibold hover:bg-green-700 transition-colors h-12 min-w-[120px]"
-          >
-            {copied === 'cashapp' ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
-            {copied === 'cashapp' ? 'Copied!' : 'Copy Tag'}
-          </button>
-        </div>
+        {/* Copy Button - Full Width on Mobile, 56px Touch Target */}
+        <button 
+          onClick={() => copyToClipboard('$BradFlower', 'cashapp')}
+          className="w-full flex items-center justify-center gap-3 bg-green-600 text-white px-6 py-3 rounded-2xl text-base font-semibold hover:bg-green-700 active:bg-green-800 transition-colors h-14 sm:h-12"
+        >
+          {copied === 'cashapp' ? <Check className="h-6 w-6 sm:h-5 sm:w-5" /> : <Copy className="h-6 w-6 sm:h-5 sm:w-5" />}
+          <span>{copied === 'cashapp' ? 'Copied to Clipboard!' : 'Copy Cashtag'}</span>
+        </button>
         
-        <p className="text-xs text-gray-500 mt-3 text-center">
-          Scan QR code OR type <strong>$BradFlower</strong> • Send exact amount: <strong>${price}</strong>
+        <p className="text-xs text-gray-600 text-center leading-relaxed">
+          Scan QR code OR tap to copy <strong>$BradFlower</strong> · Send exactly <strong>${price}</strong>
         </p>
       </div>
 
       {/* Chime */}
-      <div className="bg-white p-4 rounded-lg border border-gray-200">
-        <p className="font-bold text-gray-900 mb-2">Chime</p>
-        <div className="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
-          <div>
-            <p className="text-sm text-gray-600">$ChimeSign</p>
-            <p className="text-lg font-bold text-green-700">$Bradley-Flower</p>
-            <p className="text-xs text-gray-500">Bradley Flower</p>
-          </div>
-          <button 
-            onClick={() => copyToClipboard('$Bradley-Flower', 'chime')}
-            className="flex items-center justify-center gap-2 bg-gray-200 text-gray-700 px-6 py-3 rounded-2xl text-sm font-semibold hover:bg-gray-300 transition-colors h-12 min-w-[120px]"
-          >
-            {copied === 'chime' ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
-            {copied === 'chime' ? 'Copied' : 'Copy'}
-          </button>
+      <div className="bg-white p-4 rounded-2xl border border-gray-200 space-y-3">
+        <div className="flex items-center justify-between">
+          <p className="font-bold text-gray-900 text-lg sm:text-base">Chime</p>
+          <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">Also Fast</span>
         </div>
+        <div className="bg-gray-50 p-4 rounded-xl space-y-2">
+          <div>
+            <p className="text-xs text-gray-500 uppercase tracking-wider">Cashtag</p>
+            <p className="text-2xl sm:text-3xl font-black text-gray-900 tracking-tight">$Bradley-Flower</p>
+            <p className="text-xs text-gray-500 mt-1">Bradley Flower</p>
+          </div>
+        </div>
+        <button 
+          onClick={() => copyToClipboard('$Bradley-Flower', 'chime')}
+          className="w-full flex items-center justify-center gap-3 bg-gray-900 text-white px-6 py-3 rounded-2xl text-base font-semibold hover:bg-gray-800 active:bg-gray-700 transition-colors h-14 sm:h-12"
+        >
+          {copied === 'chime' ? <Check className="h-6 w-6 sm:h-5 sm:w-5" /> : <Copy className="h-6 w-6 sm:h-5 sm:w-5" />}
+          <span>{copied === 'chime' ? 'Copied!' : 'Copy Cashtag'}</span>
+        </button>
+      </div>
+
+      {/* Interac e-Transfer Info */}
+      <div className="bg-blue-50 p-4 rounded-2xl border border-blue-200 space-y-3">
+        <div>
+          <p className="font-bold text-blue-900 text-lg">Interac e-Transfer (Canada)</p>
+          <p className="text-sm text-blue-700 mt-1">No security question needed for <strong>rizzie052@gmail.com</strong></p>
+        </div>
+        <div className="bg-white p-3 rounded-xl border border-blue-100">
+          <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Email</p>
+          <p className="text-lg font-mono font-bold text-gray-900 break-all">rizzie052@gmail.com</p>
+        </div>
+        <p className="text-xs text-blue-700">
+          Include Order ID <strong className="font-mono">{orderId}</strong> as the memo
+        </p>
       </div>
 
       {/* Zelle/Venmo */}
-      <div className="bg-orange-50 p-4 rounded-lg border border-orange-200">
-        <p className="font-medium text-orange-900 mb-1">Need Zelle or Venmo?</p>
-        <p className="text-2xl font-bold text-orange-900">+1 (209) 421-9365</p>
-        <p className="text-sm text-orange-700 mt-1">
-          Text <strong className="font-mono">"{orderId}"</strong> for payment tag
+      <div className="bg-orange-50 p-4 rounded-2xl border border-orange-200">
+        <p className="font-semibold text-orange-900 mb-2">Need Zelle or Venmo?</p>
+        <p className="text-2xl sm:text-3xl font-black text-orange-900 tracking-tight">+1 (209) 421-9365</p>
+        <p className="text-sm text-orange-700 mt-2 leading-relaxed">
+          Text <strong className="font-mono font-bold">{orderId}</strong> to get your payment tag
         </p>
-        <p className="text-xs text-gray-500 mt-2">
-          We'll text back the Zelle or Venmo tag within 5 minutes
-        </p>
+        <p className="text-xs text-gray-600 mt-2">Response within 5 minutes</p>
       </div>
 
       {/* Steps */}
-      <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-        <p className="font-semibold text-purple-800 mb-2">Next Steps:</p>
-        <ol className="text-sm text-purple-700 space-y-2 list-decimal pl-4">
-          <li>Send <strong className="text-lg">${price}</strong> via Cash App or Chime</li>
-          <li>Screenshot the payment confirmation</li>
-          <li>Text screenshot + Order ID to <strong>+1 (209) 421-9365</strong></li>
+      <div className="bg-purple-50 p-4 rounded-2xl border border-purple-200">
+        <p className="font-semibold text-purple-900 mb-3 text-base">Next Steps:</p>
+        <ol className="text-sm text-purple-800 space-y-2 list-decimal pl-5">
+          <li className="leading-relaxed">Send <strong className="text-lg font-bold">${price}</strong> via Cash App, Chime, or Interac</li>
+          <li className="leading-relaxed">Screenshot the payment confirmation</li>
+          <li className="leading-relaxed">Text screenshot + Order ID to <strong>+1 (209) 421-9365</strong></li>
         </ol>
-        <div className="mt-3 p-2 bg-purple-100 rounded text-center">
-          <p className="text-sm font-mono font-bold text-purple-900 text-lg">{orderId}</p>
-          <p className="text-xs text-purple-600">Include this Order ID in your text</p>
+        <div className="mt-4 p-3 bg-purple-100 rounded-xl text-center border border-purple-200">
+          <p className="text-xs text-purple-600 uppercase tracking-wider mb-1">Order ID</p>
+          <p className="text-lg sm:text-xl font-mono font-bold text-purple-900 break-all">{orderId}</p>
+          <p className="text-xs text-purple-600 mt-1">Include this in your text</p>
         </div>
       </div>
     </div>
@@ -216,7 +227,7 @@ const ReservationDrawer = ({ item, open, onOpenChange, onOrderCreated }: Reserva
 
   return (
     <Drawer open={open} onOpenChange={handleOpenChange}>
-      <DrawerContent className="max-w-[480px] mx-auto">
+      <DrawerContent className="w-full max-w-md mx-auto px-4 sm:px-0">
         {success ? (
           <div className="p-6 space-y-5 max-h-[90vh] overflow-y-auto">
             {/* Success Header */}

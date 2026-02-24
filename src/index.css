@@ -31,6 +31,9 @@
 
 @layer base {
   * { @apply border-border; }
+  html, body {
+    @apply overflow-x-hidden;
+  }
   body {
     @apply bg-background text-foreground font-sans antialiased;
     font-family: 'Inter', sans-serif;

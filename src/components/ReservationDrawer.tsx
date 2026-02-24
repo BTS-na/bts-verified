@@ -169,7 +169,7 @@ export const ReservationDrawer = ({ open, onOpenChange, item }: ReservationDrawe
 
             <div className="p-4 bg-zinc-900 rounded-xl text-white">
               <p className="text-[11px] leading-relaxed opacity-80">
-                <strong>Next Step:</strong> Complete payment within 30 minutes. Once verified, tickets will be transferred immediately via Ticketmaster to <strong>{email}</strong>.
+                <strong>Next Step:</strong> Complete payment within 30 minutes. Once verified, tickets will be transferred to you within 24 hours.
               </p>
             </div>
           </div>

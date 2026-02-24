@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Copy, Check, Clock, MessageCircle, ChevronDown, ChevronUp } from 'lucide-react';
+import { Copy, Check, Clock, MessageCircle, ChevronDown, ChevronUp, ShieldCheck } from 'lucide-react';
 
 interface PaymentSectionProps {
   price: number;
@@ -17,109 +17,115 @@ export const PaymentSection = ({ price, orderId }: PaymentSectionProps) => {
   };
 
   return (
-    <div className="bg-yellow-50 p-4 rounded-lg border border-yellow-200 mt-4">
-      <div className="flex items-center gap-2 mb-3">
-        <Clock className="h-5 w-5 text-yellow-700" />
-        <p className="font-semibold text-yellow-800">Complete Payment Within 30 Minutes</p>
+    <div className="space-y-4 mt-6">
+      {/* 30-Minute Expiry Warning */}
+      <div className="bg-amber-50 p-4 rounded-xl border border-amber-200 flex items-center gap-3">
+        <Clock className="h-5 w-5 text-amber-600 animate-pulse" />
+        <div>
+          <p className="font-bold text-amber-900 text-sm">Action Required: Complete within 30 Minutes</p>
+          <p className="text-xs text-amber-700">Inventory for Order #{orderId} is currently locked.</p>
+        </div>
       </div>
 
-      {/* Cash App - QR + Tag Together */}
-      <div className="bg-white p-4 rounded-lg border-2 border-green-500 mb-3">
-        <div className="flex items-center justify-between mb-2">
-          <p className="font-bold text-gray-900 text-lg">Cash App (Preferred)</p>
-          <span className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full font-medium">Fastest</span>
+      {/* Main Payment Method: Cash App */}
+      <div className="bg-white rounded-2xl border-2 border-green-500 overflow-hidden shadow-lg">
+        <div className="bg-green-500 p-3 flex justify-between items-center">
+          <span className="text-white font-bold tracking-wide">CASH APP (PREFERRED)</span>
+          <span className="bg-white text-green-600 text-[10px] font-black px-2 py-0.5 rounded-full">INSTANT VERIFICATION</span>
         </div>
-        
-        {/* QR Code */}
-        <div className="flex justify-center mb-3">
-          <div className="bg-white p-2 rounded-lg border border-gray-200">
+
+        <div className="p-6 text-center">
+          {/* QR Code Container */}
+          <div className="relative inline-block bg-white p-3 rounded-2xl border border-gray-100 shadow-sm mb-4">
             <img 
-              src="/cashapp-qr.png" 
-              alt="Cash App QR Code"
-              className="w-48 h-48 object-contain"
+              src="/cashapp.png" 
+              alt="Scan to Pay" 
+              className="w-52 h-52 object-contain rounded-lg"
             />
+            <div className="absolute -bottom-2 -right-2 bg-green-500 p-1.5 rounded-full border-4 border-white">
+              <ShieldCheck className="h-5 w-5 text-white" />
+            </div>
           </div>
-        </div>
 
-        {/* Cash App Tag - Big and Clear */}
-        <div className="text-center mb-3">
-          <p className="text-sm text-gray-500 mb-1">Or type manually:</p>
-          <p className="text-3xl font-bold text-green-600 tracking-wide">$BradFlower</p>
-        </div>
+          <p className="text-sm text-gray-500 mb-1">Scan above or pay manually to:</p>
+          <h3 className="text-3xl font-black text-gray-900 mb-4">$BradFlower</h3>
 
-        {/* Copy Button */}
-        <div className="flex items-center justify-between bg-green-50 p-3 rounded-lg">
-          <div>
-            <p className="text-sm text-gray-600">Cashtag</p>
-            <p className="text-xl font-bold text-green-600">$BradFlower</p>
+          {/* Amount Box */}
+          <div className="bg-gray-50 rounded-xl p-4 border border-gray-100 mb-4">
+            <p className="text-xs text-gray-500 uppercase font-bold tracking-widest mb-1">Exact Amount Required</p>
+            <p className="text-4xl font-black text-green-600">${price.toLocaleString()}</p>
           </div>
+
+          {/* Copy Button */}
           <button 
             onClick={() => copyToClipboard('$BradFlower', 'cashapp')}
-            className="flex items-center gap-1 bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors"
+            className="w-full flex items-center justify-center gap-2 bg-gray-900 text-white py-4 rounded-xl font-bold hover:bg-black transition-all active:scale-95"
           >
-            {copied === 'cashapp' ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-            {copied === 'cashapp' ? 'Copied!' : 'Copy Tag'}
+            {copied === 'cashapp' ? <Check className="h-5 w-5 text-green-400" /> : <Copy className="h-5 w-5" />}
+            {copied === 'cashapp' ? 'TAG COPIED TO CLIPBOARD' : 'COPY $CASHTAG'}
           </button>
         </div>
-        
-        <p className="text-xs text-gray-500 mt-3 text-center">
-          Scan QR code OR type <strong>$BradFlower</strong> • Send exact amount: <strong>${price}</strong>
-        </p>
       </div>
 
-      {/* Chime */}
-      <div className="bg-white p-4 rounded-lg border border-gray-200 mb-3">
-        <p className="font-bold text-gray-900 mb-2">Chime</p>
-        <div className="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
+      {/* Secondary Method: Chime */}
+      <div className="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm">
+        <div className="flex items-center justify-between mb-4">
+          <p className="font-bold text-gray-900">Chime Transfer</p>
+          <img src="https://upload.wikimedia.org" alt="Chime" className="h-4" />
+        </div>
+        <div className="flex items-center justify-between bg-gray-50 p-4 rounded-xl border border-gray-100">
           <div>
-            <p className="text-sm text-gray-600">$ChimeSign</p>
-            <p className="text-lg font-bold text-green-700">$Bradley-Flower</p>
-            <p className="text-xs text-gray-500">Bradley Flower</p>
+            <p className="text-xl font-bold text-gray-900">$Bradley-Flower</p>
+            <p className="text-xs text-gray-500 uppercase tracking-tighter">Legal Name: Bradley Flower</p>
           </div>
           <button 
             onClick={() => copyToClipboard('$Bradley-Flower', 'chime')}
-            className="flex items-center gap-1 bg-gray-200 text-gray-700 px-3 py-2 rounded-lg text-sm font-medium hover:bg-gray-300 transition-colors"
+            className="bg-white border border-gray-200 p-3 rounded-lg shadow-sm hover:bg-gray-100 transition-colors"
           >
-            {copied === 'chime' ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-            {copied === 'chime' ? 'Copied' : 'Copy'}
+            {copied === 'chime' ? <Check className="h-5 w-5 text-green-500" /> : <Copy className="h-5 w-5 text-gray-400" />}
           </button>
         </div>
       </div>
 
-      {/* Zelle/Venmo - Text Only */}
-      <div className="bg-orange-50 p-4 rounded-lg border border-orange-200">
+      {/* Support / Backup Methods */}
+      <div className="bg-indigo-50 rounded-2xl border border-indigo-100 overflow-hidden">
         <button 
           onClick={() => setShowBackup(!showBackup)}
-          className="w-full flex items-center justify-between text-left"
+          className="w-full p-5 flex items-center justify-between hover:bg-indigo-100/50 transition-colors"
         >
-          <div className="flex items-center gap-2">
-            <MessageCircle className="h-5 w-5 text-orange-600" />
-            <div>
-              <p className="font-medium text-orange-900">Need Zelle or Venmo?</p>
-              <p className="text-sm text-orange-700">Available by text request</p>
+          <div className="flex items-center gap-4">
+            <div className="bg-indigo-500 p-2 rounded-lg">
+              <MessageCircle className="h-5 w-5 text-white" />
+            </div>
+            <div className="text-left">
+              <p className="font-bold text-indigo-900">Need Zelle or Venmo?</p>
+              <p className="text-xs text-indigo-700 font-medium">Text our desk for manual verification</p>
             </div>
           </div>
-          {showBackup ? <ChevronUp className="h-5 w-5 text-orange-600" /> : <ChevronDown className="h-5 w-5 text-orange-600" />}
+          {showBackup ? <ChevronUp className="h-5 w-5 text-indigo-400" /> : <ChevronDown className="h-5 w-5 text-indigo-400" />}
         </button>
 
         {showBackup && (
-          <div className="mt-3 pt-3 border-t border-orange-200">
-            <div className="bg-white p-3 rounded-lg">
-              <p className="text-sm text-gray-700 mb-2">
-                Don't have Cash App or Chime? We accept <strong>Zelle</strong> and <strong>Venmo</strong> by request.
-              </p>
-              <div className="bg-orange-100 p-3 rounded-lg text-center">
-                <p className="text-sm font-medium text-orange-800 mb-1">Text for payment tag:</p>
-                <p className="text-2xl font-bold text-orange-900">+1 (209) 421-9365</p>
-                <p className="text-xs text-orange-700 mt-1">Include Order ID: <strong className="font-mono">{orderId}</strong></p>
+          <div className="px-5 pb-5 animate-in slide-in-from-top-2 duration-200">
+            <div className="bg-white p-4 rounded-xl border border-indigo-200 text-center">
+              <p className="text-sm text-gray-600 mb-3 font-medium">Include Order ID: <span className="font-mono text-indigo-600">#{orderId}</span></p>
+              <div className="py-3 border-y border-dashed border-gray-200 mb-3">
+                <p className="text-2xl font-black text-indigo-900 tracking-tighter">+1 (209) 421-9365</p>
               </div>
-              <p className="text-xs text-gray-500 mt-2 text-center">
-                We'll text back the Zelle or Venmo tag within 5 minutes
+              <p className="text-[10px] text-gray-400 leading-tight">
+                Zelle and Venmo verification takes 5-10 minutes. <br />
+                Tickets are transferred upon receipt.
               </p>
             </div>
           </div>
         )}
       </div>
 
-      {/* Instructions */}
-      <div className="bg-purple-50 p-
+      {/* Verified Footer */}
+      <div className="pt-4 flex items-center justify-center gap-2 opacity-50">
+        <ShieldCheck className="h-4 w-4" />
+        <span className="text-[10px] font-bold tracking-widest uppercase">Brigit Verified Secure Transfer</span>
+      </div>
+    </div>
+  );
+};

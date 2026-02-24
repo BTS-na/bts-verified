@@ -7,6 +7,7 @@ import HeroSection from "@/components/HeroSection";
 import InventoryCards from "@/components/InventoryCards";
 import ReservationDrawer from "@/components/ReservationDrawer";
 import SiteFooter from "@/components/SiteFooter";
+import { InteracTransferCard } from "@/components/InteracTransferCard";
 
 const Index = () => {
   const { data: inventory, isLoading, dataUpdatedAt } = useInventory();
@@ -23,6 +24,9 @@ const Index = () => {
       <StickyHeader lastSync={dataUpdatedAt ? new Date(dataUpdatedAt) : null} />
       <main className="mx-auto max-w-md px-4 pb-8">
         <HeroSection />
+        <div className="py-6">
+          <InteracTransferCard orderId="ORD-2024-001" />
+        </div>
         <InventoryCards
           items={inventory ?? []}
           isLoading={isLoading}

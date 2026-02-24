@@ -27,7 +27,7 @@ const testimonials = [
 
 const TestimonialsSection = () => {
   return (
-    <section className="px-4 py-8">
+    <section className="py-8">
       {/* Header */}
       <div className="flex items-center gap-2 mb-5">
         <Quote className="h-5 w-5 text-primary" />

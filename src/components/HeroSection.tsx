@@ -13,7 +13,7 @@ const HeroSection = () => {
   const headline = CITY_MAP[city] || "BTS Arirang Tour";
 
   return (
-    <section className="px-4 pb-6 pt-6">
+    <section className="pb-6 pt-6">
       <div className="flex items-center gap-2 mb-4">
         <div className="flex items-center gap-1.5 bg-purple-100 text-purple-600 px-3 py-1.5 rounded-full">
           <Shield className="h-4 w-4" />

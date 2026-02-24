@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 const SiteFooter = () => (
   <footer className="border-t border-border py-6 mt-8">
-    <div className="mx-auto max-w-[480px] px-4 text-center space-y-2">
+    <div className="mx-auto max-w-md px-4 text-center space-y-2">
       <div className="flex items-center justify-center gap-3 text-xs text-muted-foreground">
         <Link to="/privacy" className="hover:text-foreground transition-colors">Privacy Policy</Link>
         <span>·</span>

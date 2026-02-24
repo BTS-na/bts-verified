@@ -38,7 +38,7 @@ const InventoryCards = ({ items, isLoading, onReserve }: InventoryCardsProps) =>
 
   if (isLoading) {
     return (
-      <div className="space-y-3 px-4">
+      <div className="space-y-3">
         {[1, 2, 3].map((i) => (
           <Card key={i} className="animate-pulse">
             <CardContent className="p-4">
@@ -54,7 +54,7 @@ const InventoryCards = ({ items, isLoading, onReserve }: InventoryCardsProps) =>
 
   if (!items || items.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center px-4 py-16 text-center">
+      <div className="flex flex-col items-center justify-center py-16 text-center">
         <Clock className="h-10 w-10 text-muted-foreground mb-3" />
         <p className="text-sm font-medium text-muted-foreground">
           Inventory Refreshing... Check back in 5 mins.
@@ -64,7 +64,7 @@ const InventoryCards = ({ items, isLoading, onReserve }: InventoryCardsProps) =>
   }
 
   return (
-    <Accordion type="multiple" defaultValue={grouped.map((g) => g.city)} className="px-4">
+    <Accordion type="multiple" defaultValue={grouped.map((g) => g.city)}>
       {grouped.map((group) => (
         <AccordionItem key={group.city} value={group.city} className="border-b-0 mb-4">
           <AccordionTrigger className="hover:no-underline py-3 px-0">

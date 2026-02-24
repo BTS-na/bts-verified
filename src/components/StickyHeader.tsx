@@ -7,7 +7,7 @@ interface StickyHeaderProps {
 const StickyHeader = ({ lastSync }: StickyHeaderProps) => {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="mx-auto flex h-14 max-w-[480px] items-center justify-between px-4">
+      <div className="mx-auto flex h-14 max-w-md items-center justify-between px-4">
         <div className="flex items-center gap-2">
           <span className="relative flex h-2.5 w-2.5">
             <span className="absolute inline-flex h-full w-full animate-pulse-live rounded-full bg-accent opacity-75" />

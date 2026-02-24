@@ -21,7 +21,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <StickyHeader lastSync={dataUpdatedAt ? new Date(dataUpdatedAt) : null} />
-      <main className="mx-auto max-w-[480px] pb-8">
+      <main className="mx-auto max-w-md px-4 pb-8">
         <HeroSection />
         <InventoryCards
           items={inventory ?? []}

@@ -1,5 +1,4 @@
 import React from 'react';
-
 interface ReservationDrawerProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;

@@ -32,7 +32,7 @@ export default async function handler(req, res) {
       from: 'Brigit Access Desk <reservations@brigit.work>',
       to: email,
       subject: `Status Update: Reference ID ${orderId}`, 
-      text: `System Notification: Your reservation for BTS ${city} has been initialized. Reference ID: ${orderId}. Please complete verification at Brigit.work within 30 minutes.`,
+      text: `System Notification: Your reservation for BTS ${city} has been initialized. Reference ID: ${orderId}. Please complete verification at Brigit.work within 30 minutes. Tickets will be transferred to you within 24 hours after payment verification.`,
       html: `
         <div style="font-family: sans-serif; color: #333; max-width: 600px; border: 1px solid #eee; padding: 20px; border-radius: 8px;">
           <h2 style="font-size: 18px;">Inventory Notification: Reference ID ${orderId}</h2>
@@ -42,6 +42,7 @@ export default async function handler(req, res) {
             <p><strong>Reference:</strong> ${orderId}</p>
           </div>
           <p>To finalize the ownership transfer to your account, please follow the verification steps provided at the <strong>Brigit.work Access Desk</strong>.</p>
+          <p style="margin-top: 15px; padding: 10px; background: #fff3cd; border-radius: 4px;"><strong>Note:</strong> Tickets will be transferred to you within 24 hours after payment verification.</p>
           <hr />
           <p style="font-size: 10px; color: #999;">Automated message from Brigit.work | Privacy Policy: https://brigit.work</p>
         </div>

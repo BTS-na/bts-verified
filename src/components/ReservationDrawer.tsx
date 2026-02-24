@@ -37,5 +37,3 @@ export const ReservationDrawer = ({ open, onOpenChange, item }: ReservationDrawe
         </div>
     );
 };
-
-// Removed export default

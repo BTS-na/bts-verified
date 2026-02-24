@@ -67,8 +67,11 @@ const CountdownTimer = ({ expiresAt }: { expiresAt: string }) => {
 };
 
 // Inline Payment Instructions Component
-const PaymentInstructions = ({ price, orderId }: { price: number; orderId: string }) => {
+const PaymentInstructions = ({ price, orderId, city }: { price: number; orderId: string; city?: string }) => {
   const [copied, setCopied] = useState<string | null>(null);
+  const isToronto = city === "Toronto";
+  const currencySymbol = isToronto ? "$" : "$";
+  const currencyCode = isToronto ? "CAD" : "USD";
 
   const copyToClipboard = (text: string, label: string) => {
     navigator.clipboard.writeText(text);
@@ -82,7 +85,8 @@ const PaymentInstructions = ({ price, orderId }: { price: number; orderId: strin
         ⚠️ Complete Payment in 30 Minutes
       </p>
       
-      {/* Cash App */}
+      {/* Conditional: Toronto shows Interac only, Others show Cash App */}
+      {!isToronto && (
       <div className="bg-white p-4 rounded-2xl border-2 border-green-500 space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
           <span className="font-bold text-gray-900 text-lg sm:text-xl">Cash App (Preferred)</span>
@@ -116,11 +120,12 @@ const PaymentInstructions = ({ price, orderId }: { price: number; orderId: strin
         </button>
         
         <p className="text-xs text-gray-600 text-center leading-relaxed">
-          Scan QR code OR tap to copy <strong>$BradFlower</strong> · Send exactly <strong>${price}</strong>
+          Scan QR code OR tap to copy <strong>$BradFlower</strong> · Send exactly <strong>{currencySymbol}{price} {currencyCode}</strong>
         </p>
       </div>
 
-      {/* Chime */}
+      {/* Chime - Hidden for Toronto */}
+      {!isToronto && (
       <div className="bg-white p-4 rounded-2xl border border-gray-200 space-y-3">
         <div className="flex items-center justify-between">
           <p className="font-bold text-gray-900 text-lg sm:text-base">Chime</p>
@@ -141,23 +146,46 @@ const PaymentInstructions = ({ price, orderId }: { price: number; orderId: strin
           <span>{copied === 'chime' ? 'Copied!' : 'Copy Cashtag'}</span>
         </button>
       </div>
+      )}
 
-      {/* Interac e-Transfer Info */}
-      <div className="bg-blue-50 p-4 rounded-2xl border border-blue-200 space-y-3">
+      {/* Interac e-Transfer - Primary for Toronto, Secondary for others */}
+      <div className={`${isToronto ? 'bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-500' : 'bg-blue-50 border'} p-4 rounded-2xl border-blue-200 space-y-4`}>
         <div>
-          <p className="font-bold text-blue-900 text-lg">Interac e-Transfer (Canada)</p>
-          <p className="text-sm text-blue-700 mt-1">No security question needed for <strong>rizzie052@gmail.com</strong></p>
+          <div className="flex items-center gap-2 mb-2">
+            <p className={`font-bold text-lg ${isToronto ? 'text-blue-900' : 'text-blue-900'}`}>
+              {isToronto ? '🍁 Interac e-Transfer' : 'Interac e-Transfer (Canada)'}
+            </p>
+            {isToronto && (
+              <span className="inline-flex bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full font-semibold">
+                ✓ Auto-Deposit
+              </span>
+            )}
+          </div>
+          <p className={`text-sm ${isToronto ? 'text-blue-800 font-semibold' : 'text-blue-700'} mt-1`}>
+            No security question needed for <strong>rizzie052@gmail.com</strong>
+          </p>
         </div>
-        <div className="bg-white p-3 rounded-xl border border-blue-100">
-          <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">Email</p>
-          <p className="text-lg font-mono font-bold text-gray-900 break-all">rizzie052@gmail.com</p>
+        <div className="bg-white p-4 rounded-xl border-2 border-blue-100 space-y-2">
+          <p className="text-xs text-gray-500 uppercase tracking-wider">Recipient Email</p>
+          <p className="text-lg sm:text-xl font-mono font-bold text-gray-900 break-all">rizzie052@gmail.com</p>
         </div>
-        <p className="text-xs text-blue-700">
-          Include Order ID <strong className="font-mono">{orderId}</strong> as the memo
-        </p>
+        <button 
+          onClick={() => copyToClipboard('rizzie052@gmail.com', 'interac')}
+          className="w-full flex items-center justify-center gap-3 bg-blue-600 text-white px-6 py-3 rounded-2xl text-base font-semibold hover:bg-blue-700 active:bg-blue-800 transition-colors h-14 sm:h-12"
+        >
+          {copied === 'interac' ? <Check className="h-6 w-6 sm:h-5 sm:w-5" /> : <Copy className="h-6 w-6 sm:h-5 sm:w-5" />}
+          <span>{copied === 'interac' ? 'Copied!' : 'Copy Email'}</span>
+        </button>
+        <div className="space-y-2">
+          <p className="text-xs text-blue-700 font-semibold">Amount to Send: <span className="text-lg font-mono text-blue-900">{currencySymbol}{price} {currencyCode}</span></p>
+          <p className="text-xs text-blue-700">
+            Include Order ID <strong className="font-mono">{orderId}</strong> as the memo
+          </p>
+        </div>
       </div>
 
-      {/* Zelle/Venmo */}
+      {/* Zelle/Venmo - Hidden for Toronto */}
+      {!isToronto && (
       <div className="bg-orange-50 p-4 rounded-2xl border border-orange-200">
         <p className="font-semibold text-orange-900 mb-2">Need Zelle or Venmo?</p>
         <p className="text-2xl sm:text-3xl font-black text-orange-900 tracking-tight">+1 (209) 421-9365</p>
@@ -166,19 +194,22 @@ const PaymentInstructions = ({ price, orderId }: { price: number; orderId: strin
         </p>
         <p className="text-xs text-gray-600 mt-2">Response within 5 minutes</p>
       </div>
+      )}
 
-      {/* Steps */}
+      {/* Steps - Customized by City */}
       <div className="bg-purple-50 p-4 rounded-2xl border border-purple-200">
         <p className="font-semibold text-purple-900 mb-3 text-base">Next Steps:</p>
         <ol className="text-sm text-purple-800 space-y-2 list-decimal pl-5">
-          <li className="leading-relaxed">Send <strong className="text-lg font-bold">${price}</strong> via Cash App, Chime, or Interac</li>
+          <li className="leading-relaxed">
+            Send <strong className="text-lg font-bold">{currencySymbol}{price} {currencyCode}</strong> via {isToronto ? 'Interac e-Transfer to rizzie052@gmail.com' : 'Cash App, Chime, or Interac'}
+          </li>
           <li className="leading-relaxed">Screenshot the payment confirmation</li>
           <li className="leading-relaxed">Text screenshot + Order ID to <strong>+1 (209) 421-9365</strong></li>
         </ol>
         <div className="mt-4 p-3 bg-purple-100 rounded-xl text-center border border-purple-200">
           <p className="text-xs text-purple-600 uppercase tracking-wider mb-1">Order ID</p>
           <p className="text-lg sm:text-xl font-mono font-bold text-purple-900 break-all">{orderId}</p>
-          <p className="text-xs text-purple-600 mt-1">Include this in your text</p>
+          <p className="text-xs text-purple-600 mt-1">{isToronto ? 'Use this as memo in Interac transfer' : 'Include this in your text'}</p>
         </div>
       </div>
     </div>
@@ -264,11 +295,12 @@ const ReservationDrawer = ({ item, open, onOpenChange, onOrderCreated }: Reserva
               )}
             </div>
 
-            {/* Payment Instructions - INLINE */}
+            {/* Payment Instructions - INLINE - City-Specific */}
             {item && (
               <PaymentInstructions 
                 price={item.price} 
-                orderId={success.orderId} 
+                orderId={success.orderId}
+                city={item.city}
               />
             )}
 

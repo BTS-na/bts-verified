@@ -5,7 +5,7 @@ import type { InventoryItem } from "@/lib/api";
 import StickyHeader from "@/components/StickyHeader";
 import HeroSection from "@/components/HeroSection";
 import InventoryCards from "@/components/InventoryCards";
-import ReservationDrawer from "@/components/ReservationDrawer";
+import { ReservationDrawer } from "@/components/ReservationDrawer";
 import SiteFooter from "@/components/SiteFooter";
 
 const Index = () => {

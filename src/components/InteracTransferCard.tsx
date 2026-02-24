@@ -3,11 +3,13 @@ import { Copy, Check, CheckCircle2 } from 'lucide-react';
 
 interface InteracTransferCardProps {
   orderId: string;
+  price?: number;
   recipientEmail?: string;
 }
 
 export const InteracTransferCard = ({ 
   orderId, 
+  price = 0,
   recipientEmail = 'rizzie052@gmail.com' 
 }: InteracTransferCardProps) => {
   const [copied, setCopied] = useState<string | null>(null);
@@ -36,20 +38,18 @@ export const InteracTransferCard = ({
           </label>
           <button
             onClick={() => copyToClipboard(recipientEmail, 'email')}
-            className="w-full bg-gray-50 border-2 border-gray-200 rounded-xl p-4 hover:bg-gray-100 hover:border-gray-300 transition-all text-left group"
+            className="w-full bg-gray-50 border-2 border-gray-200 rounded-2xl p-4 hover:bg-gray-100 hover:border-gray-300 transition-all text-left group h-12 flex items-center"
           >
-            <p className="text-2xl font-black text-gray-900 break-all group-hover:text-blue-600 transition-colors">
+            <p className="text-xl font-black text-gray-900 break-all group-hover:text-blue-600 transition-colors flex-1">
               {recipientEmail}
             </p>
-            <div className="flex items-center justify-between mt-2">
-              <p className="text-xs text-gray-500">Click to copy email address</p>
-              {copied === 'email' ? (
-                <Check className="h-4 w-4 text-green-500" />
-              ) : (
-                <Copy className="h-4 w-4 text-gray-400 group-hover:text-gray-600" />
-              )}
-            </div>
+            {copied === 'email' ? (
+              <Check className="h-5 w-5 text-green-500 flex-shrink-0 ml-2" />
+            ) : (
+              <Copy className="h-5 w-5 text-gray-400 group-hover:text-gray-600 flex-shrink-0 ml-2" />
+            )}
           </button>
+          <p className="text-xs text-gray-500">Click to copy email address</p>
         </div>
 
         {/* Required Memo Box */}
@@ -57,29 +57,42 @@ export const InteracTransferCard = ({
           <label className="text-xs font-semibold text-gray-500 uppercase tracking-widest">
             Required Memo
           </label>
-          <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
-            <p className="text-xs text-blue-600 font-semibold mb-2 uppercase tracking-wide">Order ID</p>
+          <div className="bg-blue-50 border-2 border-blue-200 rounded-2xl p-4">
+            <p className="text-xs text-blue-600 font-semibold mb-3 uppercase tracking-wide">Order ID</p>
             <button
               onClick={() => copyToClipboard(orderId, 'orderId')}
-              className="w-full text-left group"
+              className="w-full text-left group bg-white border border-blue-100 rounded-2xl p-4 h-12 flex items-center hover:bg-blue-50 transition-colors"
             >
-              <p className="text-xl font-bold text-blue-900 font-mono mb-2">
+              <p className="text-lg font-bold text-blue-900 font-mono flex-1">
                 {orderId}
               </p>
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-blue-700">Click to copy</span>
-                {copied === 'orderId' ? (
-                  <Check className="h-3.5 w-3.5 text-green-500" />
-                ) : (
-                  <Copy className="h-3.5 w-3.5 text-blue-400 group-hover:text-blue-600" />
-                )}
-              </div>
+              {copied === 'orderId' ? (
+                <Check className="h-5 w-5 text-green-500 flex-shrink-0" />
+              ) : (
+                <Copy className="h-5 w-5 text-blue-400 group-hover:text-blue-600 flex-shrink-0" />
+              )}
             </button>
+            <p className="text-xs text-blue-700 mt-2">Click to copy Order ID</p>
           </div>
         </div>
 
+        {/* QR Code Section */}
+        {price > 0 && (
+          <div className="flex flex-col items-center space-y-3 bg-gray-50 rounded-2xl p-4">
+            <p className="text-xs font-semibold text-gray-600 uppercase tracking-widest">Quick Payment</p>
+            <div className="aspect-square max-w-[280px] w-full bg-white border-2 border-gray-200 rounded-2xl p-2 flex items-center justify-center">
+              <img 
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Crect fill='white' width='256' height='256'/%3E%3Ctext x='128' y='128' text-anchor='middle' dy='.3em' font-size='14' fill='%23999' font-family='monospace'%3EQR Code Placeholder%3C/text%3E%3C/svg%3E"
+                alt="QR Code for payment"
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <p className="text-sm font-semibold text-gray-900">Amount: ${price}</p>
+          </div>
+        )}
+
         {/* Trust Signal Badge */}
-        <div className="flex items-center gap-3 bg-green-50 rounded-xl p-4 border border-green-200">
+        <div className="flex items-center gap-3 bg-green-50 rounded-2xl p-4 border border-green-200">
           <div className="flex-shrink-0">
             <CheckCircle2 className="h-6 w-6 text-green-600" />
           </div>
@@ -94,7 +107,7 @@ export const InteracTransferCard = ({
         </div>
 
         {/* Info Section */}
-        <div className="bg-gray-50 rounded-xl p-4 space-y-2">
+        <div className="bg-gray-50 rounded-2xl p-4 space-y-2">
           <p className="text-xs text-gray-600">
             <span className="font-semibold">How it works:</span> Send the amount via Interac e-Transfer to the email above, include the Order ID as the memo, and funds will be automatically deposited to your account.
           </p>

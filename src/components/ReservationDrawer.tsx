@@ -36,6 +36,7 @@ interface ReservationDrawerProps {
   item: InventoryItem | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onOrderCreated?: (orderId: string, expiresAt: string) => void;
 }
 
 const CountdownTimer = ({ expiresAt }: { expiresAt: string }) => {
@@ -113,9 +114,9 @@ const PaymentInstructions = ({ price, orderId }: { price: number; orderId: strin
           </div>
           <button 
             onClick={() => copyToClipboard('$BradFlower', 'cashapp')}
-            className="flex items-center gap-1 bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition-colors"
+            className="flex items-center justify-center gap-2 bg-green-600 text-white px-6 py-3 rounded-2xl text-sm font-semibold hover:bg-green-700 transition-colors h-12 min-w-[120px]"
           >
-            {copied === 'cashapp' ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+            {copied === 'cashapp' ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
             {copied === 'cashapp' ? 'Copied!' : 'Copy Tag'}
           </button>
         </div>
@@ -136,9 +137,9 @@ const PaymentInstructions = ({ price, orderId }: { price: number; orderId: strin
           </div>
           <button 
             onClick={() => copyToClipboard('$Bradley-Flower', 'chime')}
-            className="flex items-center gap-1 bg-gray-200 text-gray-700 px-3 py-2 rounded-lg text-sm font-medium hover:bg-gray-300 transition-colors"
+            className="flex items-center justify-center gap-2 bg-gray-200 text-gray-700 px-6 py-3 rounded-2xl text-sm font-semibold hover:bg-gray-300 transition-colors h-12 min-w-[120px]"
           >
-            {copied === 'chime' ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+            {copied === 'chime' ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
             {copied === 'chime' ? 'Copied' : 'Copy'}
           </button>
         </div>
@@ -173,7 +174,7 @@ const PaymentInstructions = ({ price, orderId }: { price: number; orderId: strin
   );
 };
 
-const ReservationDrawer = ({ item, open, onOpenChange }: ReservationDrawerProps) => {
+const ReservationDrawer = ({ item, open, onOpenChange, onOrderCreated }: ReservationDrawerProps) => {
   const [success, setSuccess] = useState<ReserveResponse | null>(null);
 
   const { register, handleSubmit, setValue, reset, formState: { errors } } = useForm<FormData>({
@@ -183,7 +184,10 @@ const ReservationDrawer = ({ item, open, onOpenChange }: ReservationDrawerProps)
 
   const mutation = useMutation({
     mutationFn: submitReservation,
-    onSuccess: (data) => setSuccess(data),
+    onSuccess: (data) => {
+      setSuccess(data);
+      onOrderCreated?.(data.orderId, data.expiresAt);
+    },
   });
 
   const onSubmit = (data: FormData) => {
@@ -315,7 +319,7 @@ const ReservationDrawer = ({ item, open, onOpenChange }: ReservationDrawerProps)
               <Button
                 type="submit"
                 disabled={mutation.isPending}
-                className="btn-haptic w-full bg-primary text-primary-foreground font-semibold"
+                className="btn-haptic w-full bg-primary text-primary-foreground font-semibold rounded-2xl h-12 text-base"
               >
                 {mutation.isPending ? "Securing..." : "Confirm Reservation"}
               </Button>

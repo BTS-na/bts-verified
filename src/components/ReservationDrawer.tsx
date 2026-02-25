@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import type { InventoryItem } from "@/lib/api";
 
 interface ReservationDrawerProps {
@@ -14,9 +14,32 @@ export const ReservationDrawer = ({ open, onOpenChange, item }: ReservationDrawe
   const [quantity, setQuantity] = React.useState(1);
   const [orderId, setOrderId] = React.useState('');
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [timeLeft, setTimeLeft] = useState(30 * 60);
   
   const city = item?.city || '';
   const isToronto = city.toLowerCase() === 'toronto';
+  
+  useEffect(() => {
+    if (!orderId) return;
+    
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    
+    return () => clearInterval(timer);
+  }, [orderId]);
+  
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,7 +47,6 @@ export const ReservationDrawer = ({ open, onOpenChange, item }: ReservationDrawe
 
     setIsSubmitting(true);
     
-    // 1. Generate Order ID
     const generatedId = 'ORD-' + Math.random().toString(36).substr(2, 9).toUpperCase();
     const totalAmount = (item?.price || 0) * quantity;
 
@@ -41,7 +63,6 @@ export const ReservationDrawer = ({ open, onOpenChange, item }: ReservationDrawe
     };
 
     try {
-      // 2. Trigger Telegram & Email via Vercel API
       const response = await fetch('/api/reserve', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -50,6 +71,7 @@ export const ReservationDrawer = ({ open, onOpenChange, item }: ReservationDrawe
 
       if (response.ok) {
         setOrderId(generatedId);
+        setTimeLeft(30 * 60);
       } else {
         alert("Verification server busy. Please try again.");
       }
@@ -139,6 +161,10 @@ export const ReservationDrawer = ({ open, onOpenChange, item }: ReservationDrawe
             <div className="p-4 bg-green-50 rounded-xl border-2 border-green-500 text-center">
               <p className="font-black text-green-900">RESERVATION SECURED</p>
               <p className="text-xs font-mono mt-1">Order ID: {orderId}</p>
+              <div className="mt-3 p-2 bg-red-100 rounded-lg border border-red-200">
+                <p className="text-[10px] text-red-600 font-bold uppercase">Time Remaining</p>
+                <p className="text-2xl font-black text-red-600 font-mono">{formatTime(timeLeft)}</p>
+              </div>
             </div>
 
             <div className="space-y-4">
